@@ -20,7 +20,7 @@ import '../styles/global.css';
     <meta name="keywords" content="أخبار سارة, أخبار إيجابية, تفاؤل, أمل, إنجازات عربية, قصص ملهمة, خبر سار">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/assets/images/logo.png">
+    <link rel="icon" type="image/png" href={`${import.meta.env.BASE_URL}/assets/images/logo.png`}>
     
     <!-- Google Fonts for elite Arabic Typography fallback -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,10 +36,10 @@ import '../styles/global.css';
 
     <!-- Background Audio Elements -->
     <audio id="chimeSound" preload="auto">
-        <source src="/assets/sounds/chime.mp3" type="audio/mpeg">
+        <source src={`${import.meta.env.BASE_URL}/assets/sounds/chime.mp3`} type="audio/mpeg">
     </audio>
     <audio id="lanternSound" preload="auto">
-        <source src="/assets/sounds/lantern.mp3" type="audio/mpeg">
+        <source src={`${import.meta.env.BASE_URL}/assets/sounds/lantern.mp3`} type="audio/mpeg">
     </audio>
 
     <!-- Client-side Global Scripts (Canvas particles, sound synthesizer) -->
