@@ -1,0 +1,120 @@
+---
+// Header.astro
+---
+<header class="main-header">
+    <div class="header-logo" onclick="window.location.reload()">
+        <svg class="logo-icon-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <linearGradient id="sunGradient" x1="20" y1="20" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#FFD000" />
+                    <stop offset="100%" stop-color="#FF7A00" />
+                </linearGradient>
+                <linearGradient id="leafGradient" x1="40" y1="50" x2="85" y2="85" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#5BE892" />
+                    <stop offset="100%" stop-color="#149E68" />
+                </linearGradient>
+                <linearGradient id="swoopGradient" x1="15" y1="60" x2="80" y2="80" gradientUnits="userSpaceOnUse">
+                    <stop offset="0%" stop-color="#0A3C36" />
+                    <stop offset="100%" stop-color="#00B4D8" />
+                </linearGradient>
+                <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#FF9F1C" flood-opacity="0.25"/>
+                </filter>
+            </defs>
+            <path d="M 18 55 C 20 75, 45 85, 75 75" stroke="url(#swoopGradient)" stroke-width="4.5" stroke-linecap="round" fill="none" />
+            <g stroke="url(#sunGradient)" stroke-width="3.5" stroke-linecap="round" opacity="0.95">
+                <line x1="45" y1="14" x2="45" y2="6" />
+                <line x1="45" y1="70" x2="45" y2="78" />
+                <line x1="17" y1="42" x2="9" y2="42" />
+                <line x1="73" y1="42" x2="81" y2="42" />
+                <line x1="25.2" y1="22.2" x2="19.5" y2="16.5" />
+                <line x1="64.8" y1="61.8" x2="70.5" y2="67.5" />
+                <line x1="25.2" y1="61.8" x2="19.5" y2="67.5" />
+                <line x1="64.8" y1="22.2" x2="70.5" y2="16.5" />
+                <line x1="33" y1="16.5" x2="29.5" y2="9.5" />
+                <line x1="57" y1="16.5" x2="60.5" y2="9.5" />
+                <line x1="33" y1="67.5" x2="29.5" y2="74.5" />
+                <line x1="57" y1="67.5" x2="60.5" y2="74.5" />
+                <line x1="19.5" y1="30" x2="11.5" y2="28" />
+                <line x1="70.5" y1="30" x2="78.5" y2="28" />
+                <line x1="19.5" y1="54" x2="11.5" y2="56" />
+                <line x1="70.5" y1="54" x2="78.5" y2="56" />
+            </g>
+            <circle cx="45" cy="42" r="21" fill="url(#sunGradient)" filter="url(#glow)" />
+            <ellipse cx="37" cy="38" rx="2.2" ry="2.2" fill="#4B3200" />
+            <ellipse cx="53" cy="38" rx="2.2" ry="2.2" fill="#4B3200" />
+            <circle cx="32" cy="43" r="3.5" fill="#FF5E5E" opacity="0.45" />
+            <circle cx="58" cy="43" r="3.5" fill="#FF5E5E" opacity="0.45" />
+            <path d="M 33 33 Q 37 31, 41 33" stroke="#4B3200" stroke-width="1.8" stroke-linecap="round" fill="none" />
+            <path d="M 49 33 Q 53 31, 57 33" stroke="#4B3200" stroke-width="1.8" stroke-linecap="round" fill="none" />
+            <path d="M 38 45 C 41 51, 49 51, 52 45" stroke="#4B3200" stroke-width="3" stroke-linecap="round" fill="none" />
+            <path d="M 40 68 C 50 68, 70 65, 78 44 C 79 38, 74 36, 70 38 C 56 46, 42 52, 33 60 C 29 64, 34 68, 40 68 Z" fill="url(#leafGradient)" />
+            <path d="M 36 62 Q 54 56, 70 42" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" fill="none" opacity="0.65" />
+        </svg>
+        <div class="logo-text">
+            <h2>خبر سار</h2>
+            <span class="logo-subtext">GOOD NEWS</span>
+        </div>
+    </div>
+    
+    <div class="header-ticker">
+        <span class="ticker-dot"></span>
+        <span class="ticker-text">تحت الضوء اليوم: إنجازات تبني الغد المشرق</span>
+    </div>
+    
+    <div class="header-controls">
+        <!-- Sound Toggle -->
+        <button id="soundToggle" class="control-btn" title="تفعيل/كتم المؤثرات الصوتية">
+            <svg id="soundIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        </button>
+        
+        <!-- Theme Toggle (Day/Night) -->
+        <button id="themeToggle" class="control-btn" title="تبديل المظهر">
+            <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+        </button>
+    </div>
+</header>
+
+<script>
+    const SVG_ICONS = {
+        soundOn: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4.702a.7.7 0 0 0-1.203-.497L5.328 8.672a.5.5 0 0 1-.354.146H2.5A.5.5 0 0 0 2 9.318v5.364a.5.5 0 0 0 .5.5h2.474a.5.5 0 0 1 .354.146l4.47 4.467a.7.7 0 0 0 1.202-.497v-14.6Z"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/></svg>`,
+        soundOff: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>`,
+        sun: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>`,
+        moon: `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>`
+    };
+
+    let localMuteState = true;
+    const soundToggle = document.getElementById('soundToggle');
+    const themeToggle = document.getElementById('themeToggle');
+
+    if (soundToggle) {
+        soundToggle.addEventListener('click', () => {
+            localMuteState = !localMuteState;
+            (window as any).setSoundMuteState(localMuteState);
+            
+            if (localMuteState) {
+                soundToggle.innerHTML = SVG_ICONS.soundOff;
+            } else {
+                soundToggle.innerHTML = SVG_ICONS.soundOn;
+                (window as any).playChime();
+            }
+        });
+    }
+
+    if (themeToggle) {
+        themeToggle.addEventListener('click', () => {
+            (window as any).playChime();
+            const body = document.body;
+            
+            if (body.classList.contains('light-theme')) {
+                body.classList.remove('light-theme');
+                body.classList.add('dark-theme');
+                themeToggle.innerHTML = SVG_ICONS.moon;
+            } else {
+                body.classList.remove('dark-theme');
+                body.classList.add('light-theme');
+                themeToggle.innerHTML = SVG_ICONS.sun;
+            }
+        });
+    }
+</script>

@@ -1,0 +1,241 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Header from '../components/Header.astro';
+import DailyDose from '../components/DailyDose.astro';
+import HopeBoard from '../components/HopeBoard.astro';
+import InteractiveMap from '../components/InteractiveMap.astro';
+import MoodFilter from '../components/MoodFilter.astro';
+import NewsCard from '../components/NewsCard.astro';
+import Footer from '../components/Footer.astro';
+
+import { getCollection } from 'astro:content';
+
+// Fetch all news stories statically from Content Collections
+const newsList = await getCollection('news');
+
+// Sort news by file identifier dynamically to maintain organic narrative sequence
+const sortedNews = newsList.sort((a, b) => parseInt(a.id) - parseInt(b.id));
+---
+
+<Layout title="خبر سار | واحة الأخبار الإيجابية والأمل">
+    <div id="appContainer" class="app-container">
+        
+        <!-- Header Brand Component -->
+        <Header />
+
+        <!-- Dynamic Main Content Grid -->
+        <main class="main-grid">
+            
+            <!-- Side Column: Interactive Widgets -->
+            <aside class="side-column">
+                <DailyDose />
+                <HopeBoard />
+                <InteractiveMap />
+            </aside>
+
+            <!-- Main Column: News Stream -->
+            <section class="content-column">
+                
+                <!-- Mood Filter Chips -->
+                <MoodFilter />
+
+                <!-- News Search & Count statistics -->
+                <div class="stream-subheader">
+                    <div class="search-box">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                        <input type="text" id="newsSearch" placeholder="ابحث عن بارقة أمل...">
+                    </div>
+                    <div class="stream-stats">
+                        <span>يعرض الموقع الآن: <strong id="visibleCount">{sortedNews.length}</strong> أخبار سارة</span>
+                    </div>
+                </div>
+
+                <!-- Interactive News Grid -->
+                <div id="newsGrid" class="news-grid">
+                    {sortedNews.map((news, index) => (
+                        <NewsCard news={news} index={index} />
+                    ))}
+                </div>
+                
+                <!-- Encouraging closing quote at stream bottom -->
+                <div class="end-of-stream">
+                    <span class="end-sparkle">✨</span>
+                    <p>أنت الآن ممتلئ بالطاقة الإيجابية! تذكر دائماً أن هناك خيراً ينمو في كل زاوية من العالم.</p>
+                </div>
+                
+            </section>
+            
+        </main>
+
+        <!-- Standardized Footer -->
+        <Footer />
+        
+    </div>
+</Layout>
+
+<script>
+    let activeFilter = 'all';
+    let searchPattern = '';
+    const likedCards = new Set<string>();
+
+    const filterChips = document.querySelectorAll('.chip');
+    const newsSearch = document.getElementById('newsSearch') as HTMLInputElement;
+    const newsGrid = document.getElementById('newsGrid');
+    const visibleCounter = document.getElementById('visibleCount');
+
+    // Run active dynamic filters based on search pattern and emotional vibe
+    const runFiltering = () => {
+        if (!newsGrid) return;
+        const cards = newsGrid.querySelectorAll('.news-card') as NodeListOf<HTMLElement>;
+        let visibleCount = 0;
+        
+        cards.forEach(card => {
+            const vibe = card.getAttribute('data-vibe') || '';
+            const title = card.querySelector('.card-title')?.textContent?.toLowerCase() || '';
+            const excerpt = card.querySelector('.card-excerpt')?.textContent?.toLowerCase() || '';
+            
+            const matchesFilter = activeFilter === 'all' || vibe === activeFilter;
+            const matchesSearch = title.includes(searchPattern.toLowerCase()) || excerpt.includes(searchPattern.toLowerCase());
+            
+            if (matchesFilter && matchesSearch) {
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+        
+        if (visibleCounter) {
+            visibleCounter.textContent = visibleCount.toString();
+        }
+        
+        // Show comforting feedback if no search item matches
+        const emptyState = document.getElementById('emptyNewsBox');
+        if (visibleCount === 0) {
+            if (!emptyState && newsGrid) {
+                const emptyBox = document.createElement('div');
+                emptyBox.id = 'emptyNewsBox';
+                emptyBox.className = 'empty-news-box';
+                emptyBox.style.cssText = 'grid-column: span 2; text-align: center; padding: 4rem 2rem;';
+                emptyBox.innerHTML = `
+                    <span style="font-size: 3rem; display: block; margin-bottom: 1rem;">🍃</span>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.6rem; margin-bottom: 0.5rem;">البحث مستمر عن بارقة أمل...</h3>
+                    <p style="color: var(--text-secondary);">لا توجد أخبار تطابق معايير البحث الحالية. جرّب كتابة كلمة أخرى أو تصفح الأقسام بالكامل!</p>
+                `;
+                newsGrid.appendChild(emptyBox);
+            }
+        } else {
+            if (emptyState) emptyState.remove();
+        }
+    };
+
+    // 1. Search bar query binding
+    if (newsSearch) {
+        newsSearch.addEventListener('input', (e) => {
+            searchPattern = (e.target as HTMLInputElement).value.trim();
+            runFiltering();
+        });
+    }
+
+    // 2. Vibes category chips selection bindings
+    filterChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            if ((window as any).playChime) (window as any).playChime();
+            
+            filterChips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            
+            activeFilter = chip.getAttribute('data-filter') || 'all';
+            runFiltering();
+        });
+    });
+
+    // 3. Delegate likes and modal readings to body click events
+    document.body.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        
+        // Modal Trigger Handler
+        const readBtn = target.closest('[data-action="read-story"]');
+        if (readBtn) {
+            if ((window as any).playChime) (window as any).playChime();
+            
+            const title = readBtn.getAttribute('data-title') || '';
+            const excerpt = readBtn.getAttribute('data-excerpt') || '';
+            openStoryModal(title, excerpt);
+            return;
+        }
+        
+        // Card Heart Liker Handler
+        const likeBtn = target.closest('[data-action="like-story"]');
+        if (likeBtn) {
+            if ((window as any).playChime) (window as any).playChime();
+            
+            const cardId = likeBtn.getAttribute('data-id') || '';
+            const countSpan = likeBtn.querySelector('.like-count') as HTMLElement;
+            const heartSvg = likeBtn.querySelector('svg');
+            let currentLikes = parseInt(countSpan.textContent || '0');
+            
+            if (likedCards.has(cardId)) {
+                likedCards.delete(cardId);
+                likeBtn.classList.remove('active');
+                countSpan.textContent = (currentLikes - 1).toString();
+                if (heartSvg) heartSvg.removeAttribute('fill');
+            } else {
+                likedCards.add(cardId);
+                likeBtn.classList.add('active');
+                countSpan.textContent = (currentLikes + 1).toString();
+                if (heartSvg) heartSvg.setAttribute('fill', '#F72585');
+                
+                // Spawn micro floating heart
+                const bubble = document.createElement('span');
+                bubble.textContent = '❤️';
+                bubble.style.cssText = 'position:absolute; left:50%; top:-10px; transform:translateX(-50%); animation:arrowBounce 0.8s ease-out forwards; opacity:1; pointer-events:none;';
+                likeBtn.appendChild(bubble);
+                setTimeout(() => bubble.remove(), 800);
+            }
+        }
+    });
+
+    // Display rich detailed story modals
+    const openStoryModal = (title: string, body: string) => {
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed; top:0; left:0; width:100%; height:100%; backgroundColor:rgba(0,0,0,0.5); backdropFilter:blur(10px); zIndex:1000; display:flex; alignItems:center; justifyContent:center; padding:2rem;';
+        overlay.dir = 'rtl';
+        
+        overlay.innerHTML = `
+            <div class="widget-card" style="width: 100%; max-width: 650px; background: var(--card-bg); max-height: 85vh; overflow-y: auto; text-align: right; box-shadow: var(--card-hover-shadow);">
+                <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--card-border); padding-bottom:1rem; margin-bottom:1.5rem;">
+                    <h3 style="font-family: var(--font-heading); font-size:1.6rem; color:var(--text-primary); margin:0; line-height:1.3;">${title}</h3>
+                    <button id="closeModalBtn" class="control-btn" style="flex-shrink:0; margin-right:1rem;">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>
+                <div style="font-family: var(--font-body); font-size:1.1rem; color:var(--text-primary); line-height:1.8; margin-bottom:2rem;">
+                    <p>${body}</p>
+                    <br>
+                    <p>محتوى إضافي: يستمر مشروعنا في تغطية أحدث إنجازات وتحديات هذا التطور المذهل. شكراً لمتابعتكم منصة خبر سار المضيئة، حيث نبرز الجوانب الأكثر إشراقاً وتأثيراً في مسيرتنا الحضارية والإنسانية.</p>
+                </div>
+                <div style="text-align:left;">
+                    <button id="closeModalBtnFooter" class="portal-btn" style="padding:0.8rem 2rem; font-size:0.95rem; display:inline-flex; align-items:center; gap:0.5rem; border:none; border-radius:50px; background:var(--gradient-mint); color:#FFF; font-weight:bold; cursor:pointer;">
+                        <span>إغلاق النافذة</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:6px;"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(overlay);
+        
+        const closeModal = () => {
+            if ((window as any).playChime) (window as any).playChime();
+            overlay.style.animation = 'scaleIn 0.2s reverse ease-out forwards';
+            setTimeout(() => overlay.remove(), 200);
+        };
+        
+        overlay.querySelector('#closeModalBtn')?.addEventListener('click', closeModal);
+        overlay.querySelector('#closeModalBtnFooter')?.addEventListener('click', closeModal);
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closeModal();
+        });
+    };
+</script>

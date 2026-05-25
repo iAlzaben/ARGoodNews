@@ -1,0 +1,90 @@
+---
+// InteractiveMap.astro
+---
+<section class="widget-card map-widget">
+    <div class="widget-header">
+        <div class="widget-icon-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+        </div>
+        <h3>خريطة الأمل والجمال</h3>
+    </div>
+    <div class="widget-body">
+        <p class="map-intro">انقر على النقاط المضيئة في الوطن العربي لاستكشاف المبادرات الإيجابية والمشاريع الواعدة.</p>
+        
+        <div class="svg-map-container">
+            <svg id="arabicMap" viewBox="0 0 600 350" class="abstract-arabic-map">
+                <rect width="100%" height="100%" fill="none" />
+                <path class="map-bg-path" d="M50,150 Q100,100 200,80 T350,120 T480,90 T550,180 T450,280 T300,240 T150,220 Z" />
+                <line x1="0" y1="100" x2="600" y2="100" class="map-grid-line" />
+                <line x1="0" y1="200" x2="600" y2="200" class="map-grid-line" />
+                <line x1="200" y1="0" x2="200" y2="350" class="map-grid-line" />
+                <line x1="400" y1="0" x2="400" y2="350" class="map-grid-line" />
+
+                <!-- Glowing Interaction Nodes -->
+                <g class="glowing-node" data-region="المغرب العربي" data-story="المغرب يطلق أكبر مشروع لتخزين وتوليد الطاقة الشمسية الصديقة للبيئة في ورزازات.">
+                    <circle cx="150" cy="180" r="10" class="node-pulse" />
+                    <circle cx="150" cy="180" r="5" class="node-center" />
+                </g>
+                
+                <g class="glowing-node" data-region="مصر" data-story="إطلاق مبادرات واسعة لزراعة مليون شجرة مثمرة وتأهيل الفئات الأكثر احتياجاً بالصناعات اليدوية.">
+                    <circle cx="290" cy="170" r="10" class="node-pulse" />
+                    <circle cx="290" cy="170" r="5" class="node-center" />
+                </g>
+
+                <g class="glowing-node" data-region="الخليج العربي" data-story="السعودية ودول الخليج تطلق برامج طموحة للذكاء الاصطناعي في خدمة البيئة وتخضير المدن.">
+                    <circle cx="450" cy="200" r="10" class="node-pulse" />
+                    <circle cx="450" cy="200" r="5" class="node-center" />
+                </g>
+
+                <g class="glowing-node" data-region="بلاد الشام" data-story="تأسيس منصات عربية مجانية لتدريب مئات الآلاف من الشباب على البرمجيات والتصميم وصناعة المستقبل.">
+                    <circle cx="360" cy="130" r="10" class="node-pulse" />
+                    <circle cx="360" cy="130" r="5" class="node-center" />
+                </g>
+            </svg>
+            
+            <div id="mapTooltip" class="map-tooltip hidden">
+                <h4 id="tooltipRegion">المنطقة</h4>
+                <p id="tooltipStory">اضغط على النقطة لقراءة الخبر السار...</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+    const arabicMap = document.getElementById('arabicMap');
+    const mapTooltip = document.getElementById('mapTooltip');
+    const tooltipRegion = document.getElementById('tooltipRegion');
+    const tooltipStory = document.getElementById('tooltipStory');
+
+    if (arabicMap && mapTooltip && tooltipRegion && tooltipStory) {
+        const glowingNodes = arabicMap.querySelectorAll('.glowing-node');
+        
+        glowingNodes.forEach(node => {
+            const showTooltip = () => {
+                const region = node.getAttribute('data-region') || '';
+                const story = node.getAttribute('data-story') || '';
+                
+                tooltipRegion.textContent = region;
+                tooltipStory.textContent = story;
+                
+                mapTooltip.classList.remove('hidden');
+                if ((window as any).playChime) (window as any).playChime();
+            };
+
+            node.addEventListener('mouseenter', showTooltip);
+            
+            node.addEventListener('mouseleave', () => {
+                mapTooltip.classList.add('hidden');
+            });
+            
+            node.addEventListener('click', (e) => {
+                e.stopPropagation();
+                showTooltip();
+            });
+        });
+        
+        document.addEventListener('click', () => {
+            mapTooltip.classList.add('hidden');
+        });
+    }
+</script>
